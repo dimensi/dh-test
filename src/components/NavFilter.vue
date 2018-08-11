@@ -1,17 +1,23 @@
 <template>
   <nav class="nav-filter">
     <h1 class="nav-filter__title">Sort</h1>
-    <button class="nav-filter__button"
+    <ButtonUi class="nav-filter__button"
       v-for="button in buttons"
-      :class="setClass(button.type)"
+      :active="button.type === type"
       @click="$emit('change-sort', button.type)"
-      :key="button.type">{{ button.title }}</button>
+      :key="button.type">{{ button.title }}</ButtonUi>
+    <slot></slot>
   </nav>
 </template>
 
 <script>
+import ButtonUi from '@/components/ButtonUi'
+
 export default {
   name: 'nav-filter',
+  components: {
+    ButtonUi
+  },
   props: {
     type: String
   },
@@ -21,13 +27,6 @@ export default {
         { type: 'name', title: 'By name' },
         { type: 'age', title: 'By age' }
       ]
-    }
-  },
-  methods: {
-    setClass (type) {
-      return {
-        'nav-filter__button--active': type === this.type
-      }
     }
   }
 }
@@ -49,23 +48,6 @@ export default {
     color $red
     margin-right 10px
     line-height 1
-
-  &__button
-    appearance none
-    padding 5px 20px
-    color white
-    font-size 18px
-    line-height 1
-    background-color $blue + 30%
-    font-family $font
-    border none
-    border-radius 5px
-    transition background-color 0.3s
-    cursor pointer
-
-  &__button:hover,
-  &__button--active
-    background-color $blue
 
   &__button + &__button
     margin-left 10px

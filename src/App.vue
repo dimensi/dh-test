@@ -1,6 +1,11 @@
 <template>
   <div id="app" class="app">
-    <NavFilter class="app__nav" @change-sort="changeSort" :type="sortType"/>
+    <NavFilter class="app__nav" @change-sort="changeSort" :type="sortType">
+      <ButtonUi theme="red"
+        class="app__drop"
+        v-if="loadedTree"
+        @click="dropTree">Drop loaded data</ButtonUi>
+    </NavFilter>
     <JsonHandler class="app__family" @update="updateTree">
       <FamilyRender :family="familyTree"/>
     </JsonHandler>
@@ -9,11 +14,13 @@
 
 <script>
 import 'normalize.css'
-import familyTree from '@/assets/sample'
+import defaultFamilyTree from '@/assets/sample'
+import jsonSaver from '@/services/jsonSaver'
 
 import FamilyRender from '@/components/FamilyRender'
 import JsonHandler from '@/components/JsonHandler'
 import NavFilter from '@/components/NavFilter'
+import ButtonUi from '@/components/ButtonUi'
 
 const deepCopy = (obj) => JSON.parse(JSON.stringify(obj))
 const sortings = {
@@ -26,18 +33,20 @@ export default {
   components: {
     FamilyRender,
     NavFilter,
-    JsonHandler
+    JsonHandler,
+    ButtonUi
   },
   data () {
+    const loadedTree = jsonSaver.get()
     return {
-      loadedTree: null,
-      familyTree,
+      loadedTree: loadedTree,
+      familyTree: loadedTree || defaultFamilyTree,
       sortType: null
     }
   },
   computed: {
     currentDefaultTree () {
-      return this.loadedTree || familyTree
+      return this.loadedTree || defaultFamilyTree
     }
   },
   methods: {
@@ -56,6 +65,13 @@ export default {
     updateTree (data) {
       this.loadedTree = data
       this.familyTree = data
+      jsonSaver.save(data)
+    },
+
+    dropTree () {
+      this.loadedTree = null
+      jsonSaver.remove()
+      this.familyTree = defaultFamilyTree
     }
   }
 }
@@ -83,4 +99,7 @@ body
   &__family
     flex 1 0 auto
     display flex
+
+  &__drop
+    margin-left 10px
 </style>

@@ -26,6 +26,12 @@ export default {
       path: [null]
     }
   },
+  watch: {
+    family (fm) {
+      this.path = [null]
+      this.updateRoute(this.path)
+    }
+  },
   methods: {
     changePath (member, parentIndex) {
       const alreadyHave = this.path.findIndex(id => id === member.id) !== -1
