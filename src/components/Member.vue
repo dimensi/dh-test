@@ -50,6 +50,7 @@ export default {
   padding 15px 20px
   background-color white
   border-radius 5px
+  box-shadow 0px 4px 4px rgba(0, 0, 0, 0.1)
 
   &__name
     width 100%
