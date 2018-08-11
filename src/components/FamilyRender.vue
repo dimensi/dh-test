@@ -56,6 +56,13 @@ export default {
   },
   created () {
     this.setPathFromQs()
+    const changePath = e => {
+      this.path = Array.isArray(e.state) ? e.state : [null]
+    }
+    window.addEventListener('popstate', changePath)
+    this.$emit('hook:destroyed', () => {
+      window.removeEventListener('popstate', changePath)
+    })
   }
 }
 </script>
