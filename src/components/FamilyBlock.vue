@@ -6,6 +6,7 @@
       :member="member"
       :family="family"
       :key="member.id"
+      :active="member.id === activeMemberId"
       @click="$emit('click', $event)"/>
   </article>
 </template>
@@ -20,7 +21,8 @@ export default {
   },
   props: {
     parent: Number,
-    family: Array
+    family: Array,
+    activeMemberId: Number
   },
   computed: {
     parentName () {
@@ -38,7 +40,7 @@ export default {
 <style lang="stylus">
 .family-block
   display block
-  padding 20px 40px
+  padding 20px 30px
   min-width 250px
   box-shadow 5px 0px 10px rgba(0, 0, 0, 0.25)
 
@@ -49,4 +51,7 @@ export default {
     line-height 1
     font-weight 900
     margin-bottom 20px
+
+  &__member + &__member
+    margin-top 20px
 </style>
