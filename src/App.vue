@@ -1,26 +1,40 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" class="app">
+    <FamilyRender :family="familyTree"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import 'normalize.css'
+import familyTree from '@/assets/sample'
+
+import FamilyRender from '@/components/FamilyRender'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    FamilyRender
+  },
+  data () {
+    return {
+      familyTree
+    }
   }
 }
 </script>
+
 <style lang="stylus">
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
+*,
+*:after,
+*:before
+  box-sizing border-box
+
+body
+  background $grey
+  font-family 'Roboto', sans-serif
+
+.app
+  display flex
+  flex-wrap wrap
+  height 100vh
 </style>
