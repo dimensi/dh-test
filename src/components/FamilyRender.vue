@@ -1,5 +1,5 @@
 <template>
-  <div class="family-render">
+  <main class="family-render">
     <FamilyBlock v-for="(parent, index) in path"
       class="family-render__item"
       :family="family"
@@ -7,7 +7,7 @@
       :active-member-id="path[index + 1]"
       :key="index"
       @click="changePath($event, index)"/>
-  </div>
+  </main>
 </template>
 
 <script>

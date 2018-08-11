@@ -1,23 +1,46 @@
 <template>
   <div id="app" class="app">
-    <FamilyRender :family="familyTree"/>
+    <NavFilter class="app__nav" @change-sort="changeSort" :type="sortType"/>
+    <FamilyRender class="app__family" :family="familyTree"/>
   </div>
 </template>
 
 <script>
 import 'normalize.css'
 import familyTree from '@/assets/sample'
+import { deepCopy } from '@/utils'
 
 import FamilyRender from '@/components/FamilyRender'
+import NavFilter from '@/components/NavFilter'
+
+const sortings = {
+  name: (a, b) => a.name > b.name,
+  age: (a, b) => a.age - b.age
+}
 
 export default {
   name: 'app',
   components: {
-    FamilyRender
+    FamilyRender,
+    NavFilter
   },
   data () {
     return {
-      familyTree
+      familyTree,
+      sortType: null
+    }
+  },
+  methods: {
+    changeSort (type) {
+      if (type === this.sortType) {
+        this.sortType = null
+        this.familyTree = familyTree
+        return
+      }
+
+      const tree = deepCopy(familyTree).sort(sortings[type])
+      this.familyTree = tree
+      this.sortType = type
     }
   }
 }
@@ -30,11 +53,18 @@ export default {
   box-sizing border-box
 
 body
-  background $grey
-  font-family 'Roboto', sans-serif
+  background-color $grey
+  font-family $font
 
 .app
   display flex
-  flex-wrap wrap
+  flex-flow column wrap
   height 100vh
+
+  &__nav
+    position relative
+    z-index 1
+
+  &__family
+    flex 1 0 auto
 </style>

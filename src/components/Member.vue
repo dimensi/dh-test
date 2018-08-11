@@ -48,7 +48,7 @@ export default {
   display flex
   flex-wrap wrap
   padding 15px 20px
-  background white
+  background-color white
   border-radius 5px
 
   &__name
@@ -68,7 +68,7 @@ export default {
     color $red
 
   &--have_child
-    background $yellow
+    background-color $yellow
     cursor pointer
     transition transform 0.3s
 
