@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="app">
     <NavFilter class="app__nav" @change-sort="changeSort" :type="sortType"/>
-    <FamilyRender class="app__family" :family="familyTree"/>
+    <JsonHandler class="app__family" @update="updateTree">
+      <FamilyRender :family="familyTree"/>
+    </JsonHandler>
   </div>
 </template>
 
@@ -11,6 +13,7 @@ import familyTree from '@/assets/sample'
 import { deepCopy } from '@/utils'
 
 import FamilyRender from '@/components/FamilyRender'
+import JsonHandler from '@/components/JsonHandler'
 import NavFilter from '@/components/NavFilter'
 
 const sortings = {
@@ -22,25 +25,38 @@ export default {
   name: 'app',
   components: {
     FamilyRender,
-    NavFilter
+    NavFilter,
+    JsonHandler
   },
   data () {
     return {
+      loadedTree: null,
       familyTree,
       sortType: null
+    }
+  },
+  computed: {
+    currentDefaultTree () {
+      return this.loadedTree || familyTree
     }
   },
   methods: {
     changeSort (type) {
       if (type === this.sortType) {
         this.sortType = null
-        this.familyTree = familyTree
+        this.familyTree = this.currentDefaultTree
         return
       }
 
-      const tree = deepCopy(familyTree).sort(sortings[type])
+      const tree = deepCopy(this.currentDefaultTree).sort(sortings[type])
       this.familyTree = tree
       this.sortType = type
+    },
+
+    updateTree (data) {
+      console.log(data)
+      this.loadedTree = data
+      this.familyTree = data
     }
   }
 }
@@ -67,4 +83,5 @@ body
 
   &__family
     flex 1 0 auto
+    display flex
 </style>
