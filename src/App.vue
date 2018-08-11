@@ -10,12 +10,12 @@
 <script>
 import 'normalize.css'
 import familyTree from '@/assets/sample'
-import { deepCopy } from '@/utils'
 
 import FamilyRender from '@/components/FamilyRender'
 import JsonHandler from '@/components/JsonHandler'
 import NavFilter from '@/components/NavFilter'
 
+const deepCopy = (obj) => JSON.parse(JSON.stringify(obj))
 const sortings = {
   name: (a, b) => a.name > b.name,
   age: (a, b) => a.age - b.age
