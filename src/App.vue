@@ -54,7 +54,6 @@ export default {
     },
 
     updateTree (data) {
-      console.log(data)
       this.loadedTree = data
       this.familyTree = data
     }
