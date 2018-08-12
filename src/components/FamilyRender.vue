@@ -2,7 +2,7 @@
   <main class="family-render">
     <FamilyBlock v-for="(parent, index) in path"
       class="family-render__item"
-      :family="family"
+      :family="currentFamily"
       :parent="parent"
       :active-member-id="path[index + 1]"
       :key="index"
@@ -13,10 +13,18 @@
 <script>
 import FamilyBlock from '@/components/FamilyBlock'
 
+const deepCopy = (obj) => JSON.parse(JSON.stringify(obj))
+
+const sortings = {
+  name: (a, b) => a.name > b.name,
+  age: (a, b) => a.age - b.age
+}
+
 export default {
   name: 'family-render',
   props: {
-    family: Array
+    family: Array,
+    sort: String
   },
   components: {
     FamilyBlock
@@ -24,6 +32,15 @@ export default {
   data () {
     return {
       path: [null]
+    }
+  },
+  computed: {
+    currentFamily () {
+      if (this.sort === null) {
+        return this.family
+      }
+
+      return deepCopy(this.family).sort(sortings[this.sort])
     }
   },
   watch: {

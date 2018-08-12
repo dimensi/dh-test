@@ -7,7 +7,7 @@
         @click="dropTree">Drop loaded data</ButtonUi>
     </NavFilter>
     <JsonHandler class="app__family" @update="updateTree">
-      <FamilyRender :family="familyTree"/>
+      <FamilyRender :family="familyTree" :sort="sortType"/>
     </JsonHandler>
   </div>
 </template>
@@ -22,12 +22,6 @@ import JsonHandler from '@/components/JsonHandler'
 import NavFilter from '@/components/NavFilter'
 import ButtonUi from '@/components/ButtonUi'
 
-const deepCopy = (obj) => JSON.parse(JSON.stringify(obj))
-const sortings = {
-  name: (a, b) => a.name > b.name,
-  age: (a, b) => a.age - b.age
-}
-
 export default {
   name: 'app',
   components: {
@@ -40,38 +34,27 @@ export default {
     const loadedTree = jsonSaver.get()
     return {
       loadedTree: loadedTree,
-      familyTree: loadedTree || defaultFamilyTree,
       sortType: null
     }
   },
   computed: {
-    currentDefaultTree () {
+    familyTree () {
       return this.loadedTree || defaultFamilyTree
     }
   },
   methods: {
     changeSort (type) {
-      if (type === this.sortType) {
-        this.sortType = null
-        this.familyTree = this.currentDefaultTree
-        return
-      }
-
-      const tree = deepCopy(this.currentDefaultTree).sort(sortings[type])
-      this.familyTree = tree
-      this.sortType = type
+      this.sortType = type === this.sortType ? null : type
     },
 
     updateTree (data) {
       this.loadedTree = data
-      this.familyTree = data
       jsonSaver.save(data)
     },
 
     dropTree () {
       this.loadedTree = null
       jsonSaver.remove()
-      this.familyTree = defaultFamilyTree
     }
   }
 }
